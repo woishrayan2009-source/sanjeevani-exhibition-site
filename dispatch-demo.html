@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanjeevani — Live Dispatch Demo</title>
+<meta name="description" content="Sanjeevani live dispatch demo — smart ambulance matching, real-route dispatch, and hospital pre-alert, simulated with live OSRM routing.">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="css/dispatch.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <div class="brand-text">
+        <span class="brand-name">SANJEEVANI</span>
+        <span class="brand-sub">Live Dispatch Demo</span>
+      </div>
+    </div>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link" href="index.html">Home</a>
+      <a class="site-nav-link is-active" href="dispatch-demo.html">Live Dispatch</a>
+      <a class="site-nav-link" href="documents.html">Documents</a>
+    </nav>
+    <div class="header-meta">
+      <div class="meta-item">
+        <span class="meta-label">Console ID</span>
+        <span class="meta-value">SJ-DC-01 · DEMO</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Local Time</span>
+        <span class="meta-value" id="clock">--:--:--</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="hazard-rule" role="presentation"></div>
+
+  <main class="dashboard">
+
+    <div class="badge-row">
+      <div class="demo-mode-badge" role="note">
+        <span class="demo-mode-dot" aria-hidden="true"></span>
+        Demo Mode — Simulated Ambulances & Hospitals
+      </div>
+      <div class="demo-mode-badge demo-mode-badge--critical" role="note">
+        <span class="demo-mode-dot" aria-hidden="true"></span>
+        Concept Demonstration — Simulated Data, Not Connected to Real 108/112 Dispatch
+      </div>
+    </div>
+
+    <section id="status-banner" class="status-banner status-normal" aria-live="polite">
+      <span class="status-led" aria-hidden="true"></span>
+      <div class="status-copy">
+        <span class="status-label">Dispatch Status</span>
+        <span class="status-value" id="status-text">STANDBY</span>
+      </div>
+      <span class="status-detail" id="status-detail">No active call</span>
+    </section>
+
+    <section class="dispatch-layout" aria-label="Dispatch map and routing">
+
+      <div class="map-panel">
+        <header class="panel-head">
+          <span class="panel-eyebrow">MAP</span>
+          <h3 class="panel-title">Dispatch Map</h3>
+          <span class="panel-note">Leaflet · OpenStreetMap</span>
+        </header>
+        <div class="map-canvas-wrap">
+          <div id="map"></div>
+          <div id="map-fallback" class="map-fallback">
+            <div class="map-fallback-label" id="fallback-label">Map tiles unavailable — showing coordinates only</div>
+            <ul class="map-fallback-list" id="fallback-list">
+              <li class="map-fallback-empty">Awaiting reported emergency…</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="route-panel">
+        <header class="panel-head">
+          <span class="panel-eyebrow">ROUTE</span>
+          <h3 class="panel-title">Two-Leg Routing</h3>
+          <span class="panel-note">OSRM · driving time</span>
+        </header>
+
+        <div class="route-leg">
+          <div class="route-leg-head">
+            <span class="route-leg-index">LEG 1</span>
+            <span class="route-leg-title">Ambulance → Patient</span>
+          </div>
+          <div class="route-leg-tiles">
+            <article class="sensor-tile" data-sensor="amb-distance">
+              <header class="tile-head">
+                <span class="tile-icon tile-icon-ambulance" aria-hidden="true"></span>
+                <h3 class="tile-title">Distance</h3>
+                <span class="tile-tag">OSRM</span>
+              </header>
+              <div class="tile-body">
+                <span class="tile-value" id="leg1-distance">—</span>
+                <span class="tile-unit">km</span>
+                <span class="tile-trend" id="leg1-distance-trend">▬</span>
+              </div>
+              <footer class="tile-foot">
+                <span class="tile-state" id="leg1-ambulance-id">No ambulance selected</span>
+              </footer>
+            </article>
+            <article class="sensor-tile" data-sensor="amb-eta">
+              <header class="tile-head">
+                <span class="tile-icon tile-icon-ambulance" aria-hidden="true"></span>
+                <h3 class="tile-title">ETA</h3>
+                <span class="tile-tag">DRIVE</span>
+              </header>
+              <div class="tile-body">
+                <span class="tile-value" id="leg1-eta">—</span>
+                <span class="tile-unit">min</span>
+                <span class="tile-trend" id="leg1-eta-trend">▬</span>
+              </div>
+              <footer class="tile-foot">
+                <span class="tile-state" id="leg1-state">Awaiting report</span>
+              </footer>
+            </article>
+          </div>
+          <p class="route-leg-note" id="leg1-note">All available ambulances are compared by live driving time to the patient — not straight-line distance — and the fastest is dispatched.</p>
+        </div>
+
+        <div class="route-leg">
+          <div class="route-leg-head">
+            <span class="route-leg-index">LEG 2</span>
+            <span class="route-leg-title">Patient → Hospital</span>
+          </div>
+          <div class="route-leg-tiles">
+            <article class="sensor-tile" data-sensor="hosp-distance">
+              <header class="tile-head">
+                <span class="tile-icon tile-icon-hospital" aria-hidden="true"></span>
+                <h3 class="tile-title">Distance</h3>
+                <span class="tile-tag">OSRM</span>
+              </header>
+              <div class="tile-body">
+                <span class="tile-value" id="leg2-distance">—</span>
+                <span class="tile-unit">km</span>
+                <span class="tile-trend" id="leg2-distance-trend">▬</span>
+              </div>
+              <footer class="tile-foot">
+                <span class="tile-state" id="leg2-hospital-id">No hospital selected</span>
+              </footer>
+            </article>
+            <article class="sensor-tile" data-sensor="hosp-eta">
+              <header class="tile-head">
+                <span class="tile-icon tile-icon-hospital" aria-hidden="true"></span>
+                <h3 class="tile-title">ETA</h3>
+                <span class="tile-tag">DRIVE</span>
+              </header>
+              <div class="tile-body">
+                <span class="tile-value" id="leg2-eta">—</span>
+                <span class="tile-unit">min</span>
+                <span class="tile-trend" id="leg2-eta-trend">▬</span>
+              </div>
+              <footer class="tile-foot">
+                <span class="tile-state" id="leg2-state">Awaiting Leg 1</span>
+              </footer>
+            </article>
+          </div>
+          <p class="route-leg-note" id="leg2-note">Routed to the nearest hospital equipped for the reported emergency type.</p>
+        </div>
+      </div>
+
+    </section>
+
+    <section class="prealert-panel" id="prealert-panel" aria-live="polite">
+      <div class="prealert-head">
+        <span class="prealert-icon" aria-hidden="true">🏥</span>
+        <div class="prealert-title-wrap">
+          <span class="prealert-title">Hospital Pre-Alert Sent</span>
+          <span class="prealert-meta" id="prealert-meta">—</span>
+        </div>
+      </div>
+      <p class="prealert-message" id="prealert-message"></p>
+    </section>
+
+    <section class="log-panel">
+      <button type="button" class="log-toggle" id="log-toggle" aria-expanded="true" aria-controls="log-list">
+        <span class="panel-eyebrow">LOG</span>
+        <h3 class="panel-title">Dispatch Log</h3>
+        <span class="log-toggle-icon" aria-hidden="true">▾</span>
+      </button>
+      <ul class="log-list" id="log-list"></ul>
+    </section>
+
+    <section class="input-panel" aria-label="Report emergency controls">
+      <header class="panel-head">
+        <span class="panel-eyebrow">CONTROL</span>
+        <h3 class="panel-title">Report Emergency</h3>
+        <span class="panel-note">Judge demo mode — simulated call</span>
+      </header>
+      <p class="report-form-note">
+        Simulates a call reporting a medical emergency. In the live system this is triggered automatically by an SOS signal; here, set the type and location, then submit.
+      </p>
+
+      <div class="input-grid">
+        <div class="input-field">
+          <label for="input-emergency-type">Emergency Type</label>
+          <select id="input-emergency-type">
+            <option value="Trauma">Trauma</option>
+            <option value="Cardiac">Cardiac</option>
+            <option value="General">General</option>
+          </select>
+        </div>
+        <div class="input-field">
+          <label for="input-location">Patient Location (lat, lng)</label>
+          <input type="text" id="input-location" value="23.0225, 72.5714">
+        </div>
+      </div>
+
+      <div class="input-actions">
+        <button type="button" class="submit-btn" id="report-emergency">Report Emergency</button>
+        <button type="button" class="reset-btn" id="reset-dispatch">Reset</button>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>Sanjeevani Live Dispatch Demo — simulated ambulances &amp; hospitals, live OSRM routing</span>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="js/dispatch-demo.js"></script>
+</body>
+</html>
