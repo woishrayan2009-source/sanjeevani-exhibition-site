@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sanjeevani — Smart Emergency Medical Response</title>
+<meta name="description" content="Sanjeevani is a smart emergency medical response system — smart ambulance-to-patient matching, routing, and hospital pre-alert, closing the golden hour gap.">
+<link rel="stylesheet" href="assets/fonts/fonts.css">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <div class="brand-text">
+        <span class="brand-name">SANJEEVANI</span>
+        <span class="brand-sub">Smart Emergency Medical Response</span>
+      </div>
+    </div>
+    <nav class="site-nav" aria-label="Primary">
+      <a class="site-nav-link is-active" href="index.html">Home</a>
+      <a class="site-nav-link" href="dispatch-demo.html">Live Dispatch</a>
+      <a class="site-nav-link" href="documents.html">Documents</a>
+    </nav>
+  </header>
+
+  <div class="hazard-rule" role="presentation"></div>
+
+  <main class="page">
+
+    <section class="hero">
+      <div class="demo-mode-badge" role="note">
+        <span class="demo-mode-dot" aria-hidden="true"></span>
+        Software Demo — Live Routing Data, No Hardware Required
+      </div>
+      <h1 class="hero-pitch">When every minute counts, Sanjeevani gets the <em>right</em> ambulance to the <em>right</em> patient — and the hospital ready before they arrive.</h1>
+      <p class="hero-sub">Smart ambulance-to-patient matching, real-route dispatch, and an automatic hospital pre-alert — designed to close India's golden hour gap.</p>
+      <div class="hero-actions">
+        <a class="btn-primary" href="dispatch-demo.html">View Live Dispatch Demo →</a>
+        <a class="btn-ghost" href="documents.html">Read the Documents</a>
+      </div>
+    </section>
+
+    <section class="golden-hour" aria-labelledby="golden-hour-title">
+      <div class="section-head">
+        <span class="panel-eyebrow">THE PROBLEM</span>
+        <h2 class="section-title" id="golden-hour-title">The Golden Hour Problem</h2>
+        <p class="section-lede">The "golden hour" is the window after a severe injury in which timely care most improves survival. In India, that window is routinely missed — not for lack of hospitals, but for lack of a system connecting patient, ambulance, and hospital in time.</p>
+      </div>
+
+      <div class="stat-panel" role="group" aria-label="Editable golden hour statistics">
+
+        <div class="stat-card" data-tone="teal">
+          <span class="stat-card-label">Reach Care Within the Golden Hour</span>
+          <input class="stat-input" type="text" id="stat-golden-hour" value="~20%" aria-label="Percentage of accident victims reaching care within the golden hour">
+          <span class="stat-source-label">Source</span>
+          <input class="stat-source-input" type="text" id="source-golden-hour" placeholder="Add citation — e.g. author, report, year">
+        </div>
+
+        <div class="stat-card" data-tone="amber">
+          <span class="stat-card-label">Average Highway Response Time</span>
+          <input class="stat-input" type="text" id="stat-response-time" value="25–35 min" aria-label="Average highway ambulance response time">
+          <span class="stat-source-label">Source</span>
+          <input class="stat-source-input" type="text" id="source-response-time" placeholder="Add citation — e.g. author, report, year">
+        </div>
+
+        <div class="stat-card" data-tone="red">
+          <span class="stat-card-label">Ambulance Density vs. WHO Norm</span>
+          <input class="stat-input" type="text" id="stat-density" value="Below WHO ratio" aria-label="Ambulance density relative to WHO recommendation">
+          <span class="stat-source-label">Source</span>
+          <input class="stat-source-input" type="text" id="source-density" placeholder="Add citation — e.g. author, report, year">
+        </div>
+
+      </div>
+
+      <p class="stat-panel-note">These fields are editable — fill them in from your own research notes and cite your sources in your write-up. The values shown are placeholders, not verified claims.</p>
+    </section>
+
+    <section class="how-it-works" aria-labelledby="how-it-works-title">
+      <div class="section-head">
+        <span class="panel-eyebrow">THE SOLUTION</span>
+        <h2 class="section-title" id="how-it-works-title">How Sanjeevani Works</h2>
+        <p class="section-lede">Three steps, from the moment of the incident to the moment the hospital is ready.</p>
+      </div>
+
+      <div class="step-flow">
+
+        <article class="step-card" data-step="1">
+          <span class="step-index">STEP 01</span>
+          <span class="step-icon" aria-hidden="true">🆘</span>
+          <h3 class="step-title">SOS Raised</h3>
+          <p class="step-desc">A bystander, victim, or connected sensor raises an SOS with live GPS location, instantly logged to the dispatch grid.</p>
+        </article>
+
+        <span class="step-connector" aria-hidden="true">→</span>
+
+        <article class="step-card" data-step="2">
+          <span class="step-index">STEP 02</span>
+          <span class="step-icon" aria-hidden="true">🧭</span>
+          <h3 class="step-title">Smart Match & Route</h3>
+          <p class="step-desc">The nearest available ambulance is matched by real-time distance and traffic, then routed to the patient along the fastest live path.</p>
+        </article>
+
+        <span class="step-connector" aria-hidden="true">→</span>
+
+        <article class="step-card" data-step="3">
+          <span class="step-index">STEP 03</span>
+          <span class="step-icon" aria-hidden="true">🏥</span>
+          <h3 class="step-title">Hospital Pre-Alert</h3>
+          <p class="step-desc">The nearest suitable hospital is notified in advance with patient status and ETA, so care teams are ready the moment the ambulance arrives.</p>
+        </article>
+
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <span>Sanjeevani — Smart Emergency Medical Response · Software demo build, part of the Kavach family</span>
+  </footer>
+
+</body>
+</html>
