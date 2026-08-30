@@ -978,3 +978,243 @@ button:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .site-header, .page { animation: none; }
 }
+
+
+/* ==========================================================================
+   Dispatch demo — map + routing layout
+   ========================================================================== */
+.dispatch-layout {
+  display: grid;
+  grid-template-columns: 1.4fr 1fr;
+  gap: 14px;
+  align-items: start;
+}
+
+.map-panel,
+.route-panel,
+.prealert-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px 18px 18px;
+  box-shadow: var(--shadow-panel);
+}
+
+.map-canvas-wrap {
+  position: relative;
+  height: 420px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--border-soft);
+  background: var(--surface-2);
+}
+
+#map { position: absolute; inset: 0; width: 100%; height: 100%; }
+
+.map-fallback {
+  position: absolute;
+  inset: 0;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px;
+  text-align: center;
+}
+.map-fallback.is-visible { display: flex; }
+
+.map-fallback-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+  max-width: 340px;
+}
+
+.map-fallback-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+  max-width: 360px;
+}
+
+.map-fallback-list li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 4px;
+  padding: 8px 10px;
+  text-align: left;
+}
+.map-fallback-list li[data-role="patient"] { border-left: 2px solid var(--red); }
+.map-fallback-list li[data-role="ambulance-dispatched"] { border-left: 2px solid var(--teal); }
+.map-fallback-list li[data-role="ambulance"] { border-left: 2px solid var(--border); color: var(--text-faint); }
+.map-fallback-list li[data-role="hospital-chosen"] { border-left: 2px solid var(--amber); }
+.map-fallback-list li[data-role="hospital"] { border-left: 2px solid var(--border); color: var(--text-faint); }
+
+.map-fallback-empty {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-faint);
+}
+
+/* Leaflet marker icons */
+.marker-icon {
+  font-size: 20px;
+  line-height: 1;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+.marker-icon-ambulance { opacity: 0.55; }
+.marker-icon-ambulance.is-dispatched { opacity: 1; animation: marker-pulse 1.2s ease-in-out infinite; }
+.marker-icon-hospital { opacity: 0.55; }
+.marker-icon-hospital.is-chosen { opacity: 1; }
+.marker-icon-patient { opacity: 1; }
+
+@keyframes marker-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.18); }
+}
+
+.ext-marker-tooltip {
+  font-family: var(--font-mono) !important;
+  font-size: 11px !important;
+  background: var(--surface-2) !important;
+  color: var(--text) !important;
+  border: 1px solid var(--border) !important;
+  border-radius: 4px !important;
+}
+
+/* ==========================================================================
+   Route / leg panel
+   ========================================================================== */
+.route-leg {
+  margin-bottom: 20px;
+}
+.route-leg:last-child { margin-bottom: 0; }
+
+.route-leg-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.route-leg-index {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-faint);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 6px;
+  letter-spacing: 0.06em;
+}
+
+.route-leg-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.route-leg-tiles {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.route-leg-note {
+  margin: 10px 0 0;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   Report Emergency form
+   ========================================================================== */
+.report-form-note {
+  margin: 0 0 14px;
+  font-size: 12px;
+  color: var(--text-faint);
+  line-height: 1.5;
+}
+
+/* ==========================================================================
+   Hospital pre-alert panel
+   ========================================================================== */
+.prealert-panel {
+  border-color: var(--amber-dim);
+  display: none;
+}
+.prealert-panel.is-visible { display: block; }
+
+.prealert-head {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.prealert-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  background: rgba(255,157,46,0.1);
+  border: 1px solid var(--amber-dim);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 17px;
+  flex-shrink: 0;
+}
+
+.prealert-title-wrap { display: flex; flex-direction: column; gap: 1px; }
+
+.prealert-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+  color: var(--amber);
+}
+
+.prealert-meta {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-faint);
+}
+
+.prealert-message {
+  background: var(--surface-2);
+  border: 1px solid var(--border-soft);
+  border-radius: 6px;
+  padding: 14px 16px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-dim);
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+.prealert-message strong { color: var(--text); }
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 900px) {
+  .dispatch-layout { grid-template-columns: 1fr; }
+  .map-canvas-wrap { height: 320px; }
+  .route-leg-tiles { grid-template-columns: 1fr 1fr; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .marker-icon-ambulance.is-dispatched { animation: none; }
+}
