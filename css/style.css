@@ -1,6 +1,28 @@
 /* ==========================================================================
    Sanjeevani — Smart Emergency Medical Response
-   Built on the Kavach Design System tokens (literal — not approximated)
+   MERGED STYLESHEET — combines the two versions you had into one file.
+
+   What was wrong / what I did:
+   - You had two stylesheets using two DIFFERENT token systems
+     (--bg/--surface/--text... vs --ink/--panel/--paper/--muted...).
+     If both ever got loaded, or your HTML mixed classes from both files,
+     colors/fonts would silently fall back to browser defaults because the
+     variables didn't exist in whichever file "won". That's almost
+     certainly why things looked broken.
+   - Kept the FIRST file as the base, since it's the literal Kavach Design
+     System used across your other project sites (Extingo, etc.) and is
+     the only one of the two with the dashboard, sensor tiles, log panel,
+     input panel, documents page, and full dispatch-demo map/route styles.
+     The second file only covered the homepage.
+   - The second file's homepage "dispatch preview" section was a more
+     finished revision (numbered stepper + live readout cards, JS-driven
+     progress line instead of CSS keyframes) — I kept THAT version, but
+     re-skinned every color/font in it to the Kavach tokens below so it
+     matches the rest of the site instead of introducing a second palette.
+   - Dropped the second file's global `section { border-bottom... }` rule
+     on purpose — it would have added an unwanted divider line and huge
+     padding to every <section> on every other page (dashboard, docs,
+     dispatch demo), not just the homepage.
    ========================================================================== */
 :root {
   --bg: #0a0c0e;
@@ -52,8 +74,15 @@ h1, h2, h3 { margin: 0; font-family: var(--font-display); }
 
 p { line-height: 1.6; }
 
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+}
+
 /* ==========================================================================
-   Header — same structure as the rest of the Kavach family
+   Header
    ========================================================================== */
 .site-header {
   display: flex;
@@ -117,9 +146,7 @@ p { line-height: 1.6; }
   color: var(--amber);
 }
 
-/* ==========================================================================
-   Hazard rule — signature divider, directly under header, exactly as Extingo
-   ========================================================================== */
+/* Signature hazard-stripe divider, directly under the header */
 .hazard-rule {
   height: 6px;
   width: 100%;
@@ -174,7 +201,7 @@ p { line-height: 1.6; }
 }
 
 /* ==========================================================================
-   Demo mode badge (shared Kavach component)
+   Demo mode badge (shared component)
    ========================================================================== */
 .demo-mode-badge {
   align-self: flex-start;
@@ -255,7 +282,7 @@ p { line-height: 1.6; }
 }
 
 /* ==========================================================================
-   Buttons (shared Kavach button component)
+   Buttons
    ========================================================================== */
 .btn-primary,
 .btn-ghost {
@@ -306,6 +333,7 @@ p { line-height: 1.6; }
 .stat-card {
   background: var(--surface);
   border: 1px solid var(--border);
+  border-left: 4px solid var(--border);
   border-radius: var(--radius);
   padding: 20px 20px 18px;
   box-shadow: var(--shadow-panel);
@@ -339,7 +367,11 @@ p { line-height: 1.6; }
 }
 .stat-input::placeholder { color: var(--text-faint); }
 
+.stat-card[data-tone="teal"] { border-left-color: var(--teal); }
+.stat-card[data-tone="teal"] .stat-input { color: var(--teal); }
+.stat-card[data-tone="amber"] { border-left-color: var(--amber); }
 .stat-card[data-tone="amber"] .stat-input { color: var(--amber); }
+.stat-card[data-tone="red"] { border-left-color: var(--red); }
 .stat-card[data-tone="red"] .stat-input { color: var(--red); }
 
 .stat-source-label {
@@ -445,7 +477,72 @@ p { line-height: 1.6; }
 }
 
 /* ==========================================================================
-   Dashboard-style page shell (dispatch demo, etc.) — same rhythm as Extingo
+   Status bar — thin live-status strip that sits between the hero and the
+   dispatch preview panel on the homepage (ported from the second file)
+   ========================================================================== */
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  padding: 16px 22px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--teal);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-panel);
+}
+
+.status-bar-main { display: flex; align-items: center; gap: 12px; }
+
+.status-bar-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 0 4px rgba(53, 224, 196, 0.22);
+  flex-shrink: 0;
+  transition: background 200ms ease, box-shadow 200ms ease;
+}
+.status-bar-dot.is-live {
+  background: var(--red);
+  box-shadow: 0 0 0 4px rgba(255, 71, 87, 0.22);
+  animation: status-bar-pulse 1200ms ease-in-out infinite;
+}
+
+@keyframes status-bar-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+
+.status-bar-text { display: flex; flex-direction: column; line-height: 1.2; }
+
+.status-bar-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+  text-transform: uppercase;
+}
+
+.status-bar-value {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--teal);
+  transition: color 200ms ease;
+}
+.status-bar-value.is-live { color: var(--red); }
+
+.status-bar-note {
+  margin: 0;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+/* ==========================================================================
+   Dashboard-style page shell (dispatch demo, etc.)
    ========================================================================== */
 .dashboard {
   max-width: 1180px;
@@ -497,7 +594,7 @@ p { line-height: 1.6; }
 .panel-head .panel-title { margin-right: auto; }
 
 /* ==========================================================================
-   Status banner
+   Status banner (dashboard-page emergency status, distinct from .status-bar)
    ========================================================================== */
 .status-banner {
   display: flex;
@@ -566,7 +663,7 @@ p { line-height: 1.6; }
 }
 
 /* ==========================================================================
-   Sensor-tile component (shared Kavach readout component)
+   Sensor-tile component
    ========================================================================== */
 .sensor-grid {
   display: grid;
@@ -702,7 +799,7 @@ p { line-height: 1.6; }
 .log-empty { color: var(--text-faint); font-style: normal; padding: 10px; }
 
 /* ==========================================================================
-   Input panel (shared control-panel component)
+   Input panel
    ========================================================================== */
 .input-panel {
   background: var(--surface);
@@ -937,20 +1034,11 @@ p { line-height: 1.6; }
 }
 
 /* ==========================================================================
-   Focus-visible polish
-   ========================================================================== */
-a:focus-visible,
-button:focus-visible {
-  outline: 2px solid var(--teal);
-  outline-offset: 2px;
-  border-radius: 4px;
-}
-
-/* ==========================================================================
    Page fade-in
    ========================================================================== */
 .site-header,
-.page {
+.page,
+.dashboard {
   animation: page-fade-in 0.4s ease both;
 }
 @keyframes page-fade-in {
@@ -959,29 +1047,7 @@ button:focus-visible {
 }
 
 /* ==========================================================================
-   Responsive
-   ========================================================================== */
-@media (max-width: 860px) {
-  .hero-pitch { font-size: 32px; }
-  .step-flow { grid-template-columns: 1fr; }
-  .step-connector { transform: rotate(90deg); padding: 4px 0; }
-}
-
-@media (max-width: 600px) {
-  .site-header { padding: 16px 18px; }
-  .page { padding: 0 18px 48px; }
-}
-
-/* ==========================================================================
-   Reduced motion
-   ========================================================================== */
-@media (prefers-reduced-motion: reduce) {
-  .site-header, .page { animation: none; }
-}
-
-
-/* ==========================================================================
-   Dispatch demo — map + routing layout
+   Dispatch demo page — map + routing layout
    ========================================================================== */
 .dispatch-layout {
   display: grid;
@@ -1093,9 +1159,6 @@ button:focus-visible {
   border-radius: 4px !important;
 }
 
-/* ==========================================================================
-   Route / leg panel
-   ========================================================================== */
 .route-leg {
   margin-bottom: 20px;
 }
@@ -1138,9 +1201,6 @@ button:focus-visible {
   line-height: 1.5;
 }
 
-/* ==========================================================================
-   Report Emergency form
-   ========================================================================== */
 .report-form-note {
   margin: 0 0 14px;
   font-size: 12px;
@@ -1148,9 +1208,6 @@ button:focus-visible {
   line-height: 1.5;
 }
 
-/* ==========================================================================
-   Hospital pre-alert panel
-   ========================================================================== */
 .prealert-panel {
   border-color: var(--amber-dim);
   display: none;
@@ -1207,24 +1264,28 @@ button:focus-visible {
 .prealert-message strong { color: var(--text); }
 
 /* ==========================================================================
-   Responsive
+   Homepage Dispatch Preview — looping schematic of
+   SOS -> Smart Match & Route -> Hospital Pre-Alert.
+   This is the revised version (numbered stepper + live readout cards,
+   JS-driven progress line), re-skinned onto the Kavach tokens above.
+   Driven by js/dispatch-preview.js.
    ========================================================================== */
-@media (max-width: 900px) {
-  .dispatch-layout { grid-template-columns: 1fr; }
-  .map-canvas-wrap { height: 320px; }
-  .route-leg-tiles { grid-template-columns: 1fr 1fr; }
+.dispatch-preview-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-bottom: 24px;
 }
+.dispatch-preview-head .section-title { margin-bottom: 0; }
 
-@media (prefers-reduced-motion: reduce) {
-  .marker-icon-ambulance.is-dispatched { animation: none; }
+.dispatch-preview-note {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-faint);
 }
-
-/* ==========================================================================
-   Dispatch Preview — looping schematic of SOS -> Smart Match & Route ->
-   Hospital Pre-Alert for the homepage. The real map lives on the dispatch
-   demo page; this is a lightweight SVG teaser, driven by js/dispatch-preview.js.
-   Append to css/style.css.
-   ========================================================================== */
 
 .dispatch-preview-panel {
   background: var(--surface);
@@ -1232,6 +1293,18 @@ button:focus-visible {
   border-radius: var(--radius);
   box-shadow: var(--shadow-panel);
   padding: 22px 20px 18px;
+  /* Visible by default so the panel never depends on JS to be seen.
+     dispatch-preview.js can add .pre-reveal for one frame on load, then
+     remove it, to play the entrance transition. */
+  opacity: 1;
+  transform: none;
+  transition: opacity 520ms ease, transform 520ms ease;
+}
+
+.dispatch-preview-panel.pre-reveal {
+  opacity: 0;
+  transform: translateY(14px) scale(0.985);
+  transition: none;
 }
 
 .dispatch-preview-svg {
@@ -1240,156 +1313,260 @@ button:focus-visible {
   display: block;
 }
 
-/* faint, always-fully-visible dashed route once a leg is chosen */
 .preview-route-path {
   fill: none;
   stroke: var(--border);
   stroke-width: 2;
   stroke-linecap: round;
   stroke-dasharray: 5 7;
-  opacity: 0;
-  transition: opacity 0.3s ease;
 }
-.preview-route-path.is-visible { opacity: 1; }
 
-/* solid teal line that grows in as the ambulance actually travels */
 .preview-progress-path {
   fill: none;
   stroke: var(--teal);
   stroke-width: 2.5;
   stroke-linecap: round;
   filter: drop-shadow(0 0 4px rgba(53, 224, 196, 0.5));
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-.preview-progress-path.is-visible { opacity: 1; }
-
-/* patient pin */
-.preview-patient-pin {
-  opacity: 0;
-  transform-box: fill-box;
-  transform-origin: center;
-  transition: opacity 0.35s ease, transform 0.35s ease;
-}
-.preview-patient-pin.is-visible { opacity: 1; }
-
-.preview-pin-icon { font-size: 20px; text-anchor: middle; }
-
-.preview-pin-pulse-ring {
-  fill: none;
-  stroke: var(--red);
-  stroke-width: 2;
-  opacity: 0;
-}
-.preview-patient-pin.is-pulsing .preview-pin-pulse-ring {
-  animation: preview-pin-pulse 0.7s ease-out 2;
-}
-@keyframes preview-pin-pulse {
-  0%   { opacity: 0.8; r: 4; }
-  100% { opacity: 0; r: 20; }
+  /* stroke-dasharray / stroke-dashoffset are set by dispatch-preview.js
+     to draw this line in as the ambulance travels along the route. */
 }
 
-/* ambulance */
-.preview-ambulance {
-  opacity: 0;
-  transition: opacity 0.25s ease;
-}
-.preview-ambulance.is-visible { opacity: 1; }
-.preview-ambulance-icon { font-size: 20px; text-anchor: middle; }
-
-/* hospital */
-.preview-hospital-icon {
-  font-size: 24px;
+.preview-hospital-icon,
+.preview-ambulance-icon,
+.preview-pin-icon,
+.preview-notify-icon {
+  font-size: 22px;
   text-anchor: middle;
-  filter: none;
-  transition: filter 0.4s ease;
+  dominant-baseline: middle;
 }
-.preview-hospital.is-nearing .preview-hospital-icon {
-  filter: drop-shadow(0 0 6px rgba(255, 157, 46, 0.55));
+
+.preview-notify-icon {
+  font-size: 15px;
+  opacity: 0;
+  transition: opacity 200ms ease;
 }
-.preview-hospital.is-alert .preview-hospital-icon {
-  filter: drop-shadow(0 0 12px rgba(255, 157, 46, 0.9));
-}
+.preview-notify-icon.is-active { opacity: 1; }
 
 .preview-eta-badge {
   opacity: 0;
+  transition: opacity 300ms ease, transform 300ms ease;
   transform: translateY(4px);
-  transition: opacity 0.3s ease, transform 0.3s ease;
 }
-.preview-hospital.is-alert .preview-eta-badge {
+.preview-eta-badge.is-active {
   opacity: 1;
   transform: translateY(0);
 }
+
 .preview-eta-badge-bg {
   fill: var(--surface-2);
   stroke: var(--amber);
   stroke-width: 1;
 }
+
 .preview-eta-badge-text {
   font-family: var(--font-mono);
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   fill: var(--amber);
   text-anchor: middle;
 }
 
-.preview-notify-icon {
-  font-size: 16px;
-  text-anchor: middle;
+.preview-patient-pin {
   opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 200ms ease;
 }
-.preview-hospital.is-alert .preview-notify-icon {
-  animation: preview-notify-pulse 0.9s ease-in-out 3;
+.preview-patient-pin.is-active { opacity: 1; }
+
+.preview-pin-pulse-ring {
+  fill: none;
+  stroke: var(--red);
+  stroke-width: 2;
+  opacity: 0.7;
+  transform-origin: center;
 }
-@keyframes preview-notify-pulse {
-  0%, 100% { opacity: 0.3; transform: scale(1); }
-  50%      { opacity: 1; transform: scale(1.25); }
+.preview-patient-pin.is-active .preview-pin-pulse-ring {
+  animation: preview-pulse 1600ms ease-out infinite;
 }
 
-/* step indicator row */
-.dispatch-preview-steps {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  flex-wrap: wrap;
-  margin-top: 16px;
-  padding-top: 14px;
+@keyframes preview-pulse {
+  0%   { r: 4;  opacity: 0.7; }
+  100% { r: 16; opacity: 0; }
+}
+
+.preview-ambulance { transition: transform 60ms linear; }
+
+/* Numbered stepper with a progress line under the preview panel */
+.dispatch-stepper {
+  margin-top: 24px;
+  padding-top: 18px;
   border-top: 1px solid var(--border-soft);
 }
 
-.preview-step {
+.stepper-items {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+  flex-wrap: wrap;
+}
+
+.stepper-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.stepper-index {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.04em;
-  color: var(--text-faint);
-  transition: color 0.3s ease;
-}
-.preview-step.is-active { color: var(--text); }
-
-.preview-step-dot {
-  width: 7px;
-  height: 7px;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
-  background: var(--border);
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  border: 1px solid var(--border);
+  font-size: 11px;
   flex-shrink: 0;
-}
-.preview-step.is-active .preview-step-dot {
-  background: var(--teal);
-  box-shadow: 0 0 6px var(--teal);
+  transition: border-color 200ms ease, color 200ms ease;
 }
 
+.stepper-item.is-active {
+  color: var(--text);
+  font-weight: 600;
+}
+.stepper-item.is-active .stepper-index {
+  border-color: var(--red);
+  color: var(--red);
+}
+.stepper-item.is-done .stepper-index {
+  border-color: var(--text-dim);
+  color: var(--text-dim);
+}
+
+.stepper-track {
+  height: 2px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.stepper-track-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--red);
+  transition: width 400ms ease;
+}
+
+.dispatch-caption {
+  margin: 16px 0 0;
+  min-height: 20px;
+  font-size: 14px;
+  color: var(--text-dim);
+}
+
+/* Live readout cards, echoing the hardware sensor-tile row */
+.dispatch-readout {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.readout-card {
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 12px 14px;
+}
+
+.readout-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.readout-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--border);
+}
+.readout-card[data-tone="red"] .readout-swatch { background: var(--red); }
+.readout-card[data-tone="amber"] .readout-swatch { background: var(--amber); }
+.readout-card[data-tone="teal"] .readout-swatch { background: var(--teal); }
+.readout-card[data-tone="grey"] .readout-swatch { background: var(--text-faint); }
+
+.readout-label {
+  font-size: 12px;
+  color: var(--text);
+  flex: 1;
+}
+
+.readout-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-faint);
+  border: 1px solid var(--border);
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+
+.readout-value {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--text);
+  transition: color 200ms ease;
+}
+.readout-value.is-active { color: var(--red); }
+
+/* ==========================================================================
+   Focus-visible polish
+   ========================================================================== */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid var(--teal);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 900px) {
+  .dispatch-layout { grid-template-columns: 1fr; }
+  .map-canvas-wrap { height: 320px; }
+  .route-leg-tiles { grid-template-columns: 1fr 1fr; }
+}
+
+@media (max-width: 860px) {
+  .hero-pitch { font-size: 32px; }
+  .step-flow { grid-template-columns: 1fr; }
+  .step-connector { transform: rotate(90deg); padding: 4px 0; }
+  .dispatch-readout { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 600px) {
+  .site-header { padding: 16px 18px; }
+  .page { padding: 0 18px 48px; }
+}
+
+/* ==========================================================================
+   Reduced motion
+   ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
-  .preview-patient-pin.is-pulsing .preview-pin-pulse-ring,
-  .preview-hospital.is-alert .preview-notify-icon {
-    animation: none;
+  .site-header, .page, .dashboard { animation: none; }
+  .marker-icon-ambulance.is-dispatched { animation: none; }
+  .dispatch-preview-panel { transition: none; }
+  .preview-ambulance,
+  .preview-patient-pin.is-active .preview-pin-pulse-ring,
+  .status-bar-dot.is-live {
+    animation: none !important;
+    transition: none !important;
   }
-}
-
-@media (max-width: 560px) {
-  .dispatch-preview-steps { gap: 12px; font-size: 10px; }
 }
