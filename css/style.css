@@ -1393,3 +1393,699 @@ button:focus-visible {
 @media (max-width: 560px) {
   .dispatch-preview-steps { gap: 12px; font-size: 10px; }
 }
+
+/* ============================================================
+   Sanjeevani — base tokens
+   ============================================================ */
+:root {
+  /* command-center dark base, ambulance red / caution amber / medical teal */
+  --ink: #0E1520;
+  --panel: #161F2C;
+  --panel-raised: #1D2836;
+  --line: #2A3646;
+  --paper: #EDF1F5;
+  --muted: #93A2B3;
+
+  --red: #E14B4B;
+  --red-dim: #7A2C2C;
+  --amber: #F0A93B;
+  --amber-dim: #7A5A1C;
+  --teal: #34A697;
+  --teal-dim: #1C5750;
+
+  --radius-s: 4px;
+  --radius-m: 10px;
+
+  --font-display: var(--font-display, "Oswald", "Arial Narrow", sans-serif);
+  --font-body: var(--font-body, "Segoe UI", "Inter", sans-serif);
+  --font-mono: var(--font-mono, "IBM Plex Mono", Consolas, monospace);
+}
+
+* { box-sizing: border-box; }
+
+html { color-scheme: dark; }
+
+body {
+  margin: 0;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--font-body);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a { color: inherit; }
+
+:focus-visible {
+  outline: 2px solid var(--amber);
+  outline-offset: 3px;
+}
+
+/* ============================================================
+   Header
+   ============================================================ */
+.site-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 20px clamp(20px, 5vw, 56px);
+}
+
+.brand { display: flex; align-items: center; gap: 12px; }
+
+.brand-mark {
+  width: 30px;
+  height: 30px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  background:
+    linear-gradient(135deg, transparent 46%, var(--red) 46% 54%, transparent 54%),
+    var(--paper);
+}
+
+.brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+
+.brand-name {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+}
+
+.brand-sub {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.site-nav { display: flex; gap: clamp(16px, 3vw, 32px); }
+
+.site-nav-link {
+  text-decoration: none;
+  font-size: 14px;
+  color: var(--muted);
+  padding-bottom: 4px;
+  border-bottom: 2px solid transparent;
+}
+
+.site-nav-link:hover { color: var(--paper); }
+
+.site-nav-link.is-active {
+  color: var(--paper);
+  border-bottom-color: var(--red);
+}
+
+.hazard-rule {
+  height: 6px;
+  background: repeating-linear-gradient(
+    -45deg,
+    var(--amber) 0 14px,
+    var(--ink) 14px 28px
+  );
+}
+
+/* ============================================================
+   Layout shell
+   ============================================================ */
+.page {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 5vw, 56px);
+}
+
+section { padding: 72px 0; border-bottom: 1px solid var(--line); }
+main > section:last-child { border-bottom: none; }
+
+.section-head { max-width: 640px; margin-bottom: 40px; }
+
+.panel-eyebrow {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: var(--amber);
+  margin-bottom: 12px;
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 3.6vw, 38px);
+  font-weight: 600;
+  margin: 0 0 14px;
+  line-height: 1.15;
+}
+
+.section-lede {
+  margin: 0;
+  color: var(--muted);
+  font-size: 16px;
+  max-width: 62ch;
+}
+
+/* ============================================================
+   Hero
+   ============================================================ */
+.hero { padding-top: 56px; max-width: 780px; }
+
+.demo-mode-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--teal);
+  background: var(--teal-dim);
+  border: 1px solid var(--teal);
+  border-radius: 999px;
+  padding: 6px 14px;
+  margin-bottom: 24px;
+}
+
+.demo-mode-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 0 3px rgba(52, 166, 151, 0.25);
+}
+
+.hero-pitch {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(32px, 5vw, 52px);
+  line-height: 1.12;
+  margin: 0 0 20px;
+}
+
+.hero-pitch em {
+  font-style: normal;
+  color: var(--red);
+}
+
+.hero-sub {
+  font-size: 18px;
+  color: var(--muted);
+  max-width: 56ch;
+  margin: 0 0 32px;
+}
+
+.hero-actions { display: flex; flex-wrap: wrap; gap: 14px; }
+
+.btn-primary,
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: 600;
+  padding: 13px 22px;
+  border-radius: var(--radius-s);
+  transition: transform 120ms ease, background 120ms ease;
+}
+
+.btn-primary {
+  background: var(--red);
+  color: #fff;
+}
+.btn-primary:hover { background: #c93f3f; transform: translateY(-1px); }
+
+.btn-ghost {
+  background: transparent;
+  border: 1px solid var(--line);
+  color: var(--paper);
+}
+.btn-ghost:hover { border-color: var(--paper); }
+
+/* ============================================================
+   Golden hour stat panel
+   ============================================================ */
+.stat-panel {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.stat-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--line);
+  border-radius: var(--radius-m);
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.stat-card[data-tone="teal"] { border-left-color: var(--teal); }
+.stat-card[data-tone="amber"] { border-left-color: var(--amber); }
+.stat-card[data-tone="red"] { border-left-color: var(--red); }
+
+.stat-card-label {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.stat-input {
+  font-family: var(--font-mono);
+  font-size: 24px;
+  font-weight: 600;
+  background: transparent;
+  border: none;
+  color: var(--paper);
+  padding: 4px 0 10px;
+  border-bottom: 1px solid var(--line);
+  width: 100%;
+}
+.stat-input:focus { border-bottom-color: var(--amber); }
+
+.stat-source-label {
+  font-size: 11px;
+  text-transform: none;
+  color: var(--muted);
+  margin-top: 6px;
+}
+
+.stat-source-input {
+  font-family: var(--font-body);
+  font-size: 13px;
+  background: var(--panel-raised);
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-s);
+  color: var(--paper);
+  padding: 8px 10px;
+}
+.stat-source-input::placeholder { color: var(--muted); }
+
+.stat-panel-note {
+  margin: 18px 0 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* ============================================================
+   Step flow
+   ============================================================ */
+.step-flow {
+  display: flex;
+  align-items: stretch;
+  gap: 4px;
+}
+
+.step-card {
+  flex: 1;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.step-index {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.step-icon { font-size: 26px; }
+
+.step-title {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.step-desc {
+  font-size: 14px;
+  color: var(--muted);
+  margin: 0;
+}
+
+.step-connector {
+  align-self: center;
+  color: var(--line);
+  font-size: 20px;
+  padding: 0 4px;
+}
+
+/* ============================================================
+   Status bar (below hero, above the process panel)
+   ============================================================ */
+.status-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 20px;
+  margin: 28px 0 40px;
+  padding: 16px 22px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-left: 4px solid var(--teal);
+  border-radius: var(--radius-m);
+  max-width: 1080px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: clamp(20px, 5vw, 56px);
+  padding-right: clamp(20px, 5vw, 56px);
+}
+
+.status-bar-main { display: flex; align-items: center; gap: 12px; }
+
+.status-bar-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--teal);
+  box-shadow: 0 0 0 4px rgba(52, 166, 151, 0.22);
+  flex-shrink: 0;
+  transition: background 200ms ease, box-shadow 200ms ease;
+}
+.status-bar-dot.is-live {
+  background: var(--red);
+  box-shadow: 0 0 0 4px rgba(225, 75, 75, 0.22);
+  animation: preview-pulse-dot 1200ms ease-in-out infinite;
+}
+
+@keyframes preview-pulse-dot {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.25); }
+}
+
+.status-bar-text { display: flex; flex-direction: column; line-height: 1.2; }
+
+.status-bar-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.06em;
+  color: var(--muted);
+}
+
+.status-bar-value {
+  font-family: var(--font-display);
+  font-size: 19px;
+  font-weight: 600;
+  color: var(--teal);
+  transition: color 200ms ease;
+}
+.status-bar-value.is-live { color: var(--red); }
+
+.status-bar-note {
+  margin: 0;
+  font-size: 13px;
+  color: var(--muted);
+}
+
+@media (max-width: 700px) {
+  .status-bar { margin-left: 0; margin-right: 0; border-radius: 0; }
+}
+
+/* ============================================================
+   Dispatch preview — live process panel, moved directly under
+   the hero so it is the first thing a visitor's eye lands on.
+   ============================================================ */
+.dispatch-preview { padding-top: 0; }
+
+.dispatch-preview-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px 24px;
+  margin-bottom: 24px;
+}
+
+.dispatch-preview-head .section-title { margin-bottom: 0; }
+
+.dispatch-preview-note {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.dispatch-preview-panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-m);
+  padding: clamp(16px, 3vw, 28px);
+  /* Visible by default so the panel never depends on JS to be seen.
+     dispatch-preview.js adds .pre-reveal for one frame on load, then
+     removes it, which is what actually plays the entrance transition. */
+  opacity: 1;
+  transform: none;
+  transition: opacity 520ms ease, transform 520ms ease;
+}
+
+.dispatch-preview-panel.pre-reveal {
+  opacity: 0;
+  transform: translateY(14px) scale(0.985);
+  transition: none;
+}
+
+.dispatch-preview-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.preview-route-path {
+  fill: none;
+  stroke: var(--line);
+  stroke-width: 2;
+  stroke-dasharray: 3 7;
+  stroke-linecap: round;
+}
+
+.preview-progress-path {
+  fill: none;
+  stroke: var(--red);
+  stroke-width: 3;
+  stroke-linecap: round;
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+
+.preview-hospital-icon,
+.preview-ambulance-icon,
+.preview-pin-icon,
+.preview-notify-icon {
+  font-size: 22px;
+  text-anchor: middle;
+  dominant-baseline: middle;
+}
+
+.preview-notify-icon {
+  font-size: 15px;
+  opacity: 0;
+  transition: opacity 200ms ease;
+}
+.preview-notify-icon.is-active { opacity: 1; }
+
+.preview-eta-badge { opacity: 0; transition: opacity 200ms ease; }
+.preview-eta-badge.is-active { opacity: 1; }
+
+.preview-eta-badge-bg {
+  fill: var(--panel-raised);
+  stroke: var(--amber);
+  stroke-width: 1;
+}
+
+.preview-eta-badge-text {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  fill: var(--amber);
+  text-anchor: middle;
+}
+
+.preview-patient-pin { opacity: 0; transition: opacity 200ms ease; }
+.preview-patient-pin.is-active { opacity: 1; }
+
+.preview-pin-pulse-ring {
+  fill: none;
+  stroke: var(--red);
+  stroke-width: 2;
+  opacity: 0.7;
+  transform-origin: center;
+}
+.preview-patient-pin.is-active .preview-pin-pulse-ring {
+  animation: preview-pulse 1600ms ease-out infinite;
+}
+
+@keyframes preview-pulse {
+  0%   { r: 4;  opacity: 0.7; }
+  100% { r: 16; opacity: 0; }
+}
+
+.preview-ambulance { transition: transform 60ms linear; }
+
+/* Numbered stepper with a progress line, mirroring a live process panel */
+.dispatch-stepper {
+  margin-top: 24px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+
+.stepper-items {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.stepper-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--muted);
+}
+
+.stepper-index {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  font-size: 11px;
+  flex-shrink: 0;
+  transition: border-color 200ms ease, color 200ms ease;
+}
+
+.stepper-item.is-active {
+  color: var(--paper);
+  font-weight: 600;
+}
+.stepper-item.is-active .stepper-index {
+  border-color: var(--red);
+  color: var(--red);
+}
+.stepper-item.is-done .stepper-index {
+  border-color: var(--muted);
+  color: var(--muted);
+}
+
+.stepper-track {
+  height: 2px;
+  background: var(--line);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.stepper-track-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--red);
+  transition: width 400ms ease;
+}
+
+.dispatch-caption {
+  margin: 16px 0 0;
+  min-height: 20px;
+  font-size: 14px;
+  color: var(--muted);
+}
+
+/* Live readout cards, echoing the sensor-card row of a hardware panel */
+.dispatch-readout {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.readout-card {
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-s);
+  padding: 12px 14px;
+}
+
+.readout-head {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 10px;
+}
+
+.readout-swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+  background: var(--line);
+}
+.readout-card[data-tone="red"] .readout-swatch { background: var(--red); }
+.readout-card[data-tone="amber"] .readout-swatch { background: var(--amber); }
+.readout-card[data-tone="teal"] .readout-swatch { background: var(--teal); }
+.readout-card[data-tone="grey"] .readout-swatch { background: var(--muted); }
+
+.readout-label {
+  font-size: 12px;
+  color: var(--paper);
+  flex: 1;
+}
+
+.readout-tag {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  padding: 1px 5px;
+}
+
+.readout-value {
+  font-family: var(--font-mono);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--paper);
+  transition: color 200ms ease;
+}
+.readout-value.is-active { color: var(--red); }
+
+@media (max-width: 860px) {
+  .dispatch-readout { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dispatch-preview-panel {
+    transition: none;
+  }
+  .preview-ambulance,
+  .preview-patient-pin .preview-pin-pulse-ring,
+  .status-bar-dot.is-live {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* ============================================================
+   Footer
+   ============================================================ */
+.site-footer {
+  padding: 28px clamp(20px, 5vw, 56px) 40px;
+  color: var(--muted);
+  font-size: 13px;
+  font-family: var(--font-mono);
+}
+
+/* ============================================================
+   Responsive
+   ============================================================ */
+@media (max-width: 860px) {
+  .stat-panel { grid-template-columns: 1fr; }
+  .step-flow { flex-direction: column; }
+  .step-connector { transform: rotate(90deg); align-self: flex-start; margin-left: 24px; }
+}
+
+@media (max-width: 600px) {
+  .site-header { flex-direction: column; align-items: flex-start; gap: 12px; }
+  .site-nav { gap: 18px; }
+}
