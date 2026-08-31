@@ -114,11 +114,54 @@
       </div>
     </section>
 
+    <section class="dispatch-preview" aria-labelledby="live-demo-heading">
+      <div class="section-head">
+        <span class="panel-eyebrow">SEE IT WORK</span>
+        <h2 class="section-title" id="live-demo-heading">One dispatch, start to finish</h2>
+        <p class="section-lede">A looping preview of the same three steps above — SOS, smart match &amp; route, and hospital pre-alert. The patient location shifts slightly on every pass.</p>
+      </div>
+      <div class="dispatch-preview-panel">
+        <svg class="dispatch-preview-svg" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animated diagram of an ambulance driving from base to a patient, then on to a hospital">
+          <!-- Leg 1: ambulance base -> patient -->
+          <path class="preview-route-path" id="preview-route-1"></path>
+          <path class="preview-progress-path" id="preview-progress-1"></path>
+          <!-- Leg 2: patient -> hospital -->
+          <path class="preview-route-path" id="preview-route-2"></path>
+          <path class="preview-progress-path" id="preview-progress-2"></path>
+          <!-- hospital, fixed position -->
+          <g class="preview-hospital" id="preview-hospital" transform="translate(565,55)">
+            <text class="preview-hospital-icon" x="0" y="8">🏥</text>
+            <g class="preview-eta-badge" id="preview-eta-badge" transform="translate(0,-30)">
+              <rect class="preview-eta-badge-bg" x="-22" y="-11" width="44" height="20" rx="10"></rect>
+              <text class="preview-eta-badge-text" id="preview-eta-badge-text" x="0" y="3">ETA 7m</text>
+            </g>
+            <text class="preview-notify-icon" x="24" y="-14">🔔</text>
+          </g>
+          <!-- patient pin, repositioned each loop by dispatch-preview.js -->
+          <g class="preview-patient-pin" id="preview-patient-pin">
+            <circle class="preview-pin-pulse-ring" r="4"></circle>
+            <text class="preview-pin-icon" x="0" y="7">📍</text>
+          </g>
+          <!-- ambulance, fixed base position, moved along the legs by JS -->
+          <g class="preview-ambulance" id="preview-ambulance" transform="translate(60,210)">
+            <text class="preview-ambulance-icon" x="0" y="7">🚑</text>
+          </g>
+        </svg>
+        <div class="dispatch-preview-steps" id="dispatch-preview-steps">
+          <span class="preview-step" data-step="1"><span class="preview-step-dot"></span>SOS Raised</span>
+          <span class="preview-step" data-step="2"><span class="preview-step-dot"></span>Smart Match &amp; Route</span>
+          <span class="preview-step" data-step="3"><span class="preview-step-dot"></span>Hospital Pre-Alert</span>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer class="site-footer">
     <span>Sanjeevani — Smart Emergency Medical Response · Software demo build, part of the Kavach family</span>
   </footer>
+
+  <script src="js/dispatch-preview.js" defer></script>
 
 </body>
 </html>
