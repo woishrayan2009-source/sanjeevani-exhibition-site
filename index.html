@@ -42,6 +42,127 @@
       </div>
     </section>
 
+    <div class="status-bar" role="status">
+      <div class="status-bar-main">
+        <span class="status-bar-dot" id="status-bar-dot" aria-hidden="true"></span>
+        <div class="status-bar-text">
+          <span class="status-bar-label">DISPATCH GRID</span>
+          <span class="status-bar-value" id="status-bar-value">STANDBY</span>
+        </div>
+      </div>
+      <p class="status-bar-note" id="status-bar-note">Demo grid idle — watching for the next simulated SOS below.</p>
+    </div>
+
+    <section class="dispatch-preview" id="dispatch-preview" aria-labelledby="live-demo-heading">
+      <div class="dispatch-preview-head">
+        <div>
+          <span class="panel-eyebrow">PROCESS</span>
+          <h2 class="section-title" id="live-demo-heading">How Sanjeevani Works</h2>
+        </div>
+        <p class="dispatch-preview-note">Looping demo — SOS to hospital pre-alert cycle</p>
+      </div>
+
+      <div class="dispatch-preview-panel">
+        <svg class="dispatch-preview-svg" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animated diagram of an ambulance driving from base to a patient, then on to a hospital">
+          <!-- Leg 1: ambulance base -> patient -->
+          <path class="preview-route-path" id="preview-route-1"></path>
+          <path class="preview-progress-path" id="preview-progress-1"></path>
+          <!-- Leg 2: patient -> hospital -->
+          <path class="preview-route-path" id="preview-route-2"></path>
+          <path class="preview-progress-path" id="preview-progress-2"></path>
+          <!-- hospital, fixed position -->
+          <g class="preview-hospital" id="preview-hospital" transform="translate(565,55)">
+            <text class="preview-hospital-icon" x="0" y="8">🏥</text>
+            <g class="preview-eta-badge" id="preview-eta-badge" transform="translate(0,-30)">
+              <rect class="preview-eta-badge-bg" x="-22" y="-11" width="44" height="20" rx="10"></rect>
+              <text class="preview-eta-badge-text" id="preview-eta-badge-text" x="0" y="3">ETA 7m</text>
+            </g>
+            <text class="preview-notify-icon" x="24" y="-14">🔔</text>
+          </g>
+          <!-- patient pin, repositioned each loop by dispatch-preview.js -->
+          <g class="preview-patient-pin" id="preview-patient-pin">
+            <circle class="preview-pin-pulse-ring" r="4"></circle>
+            <text class="preview-pin-icon" x="0" y="7">📍</text>
+          </g>
+          <!-- ambulance, fixed base position, moved along the legs by JS -->
+          <g class="preview-ambulance" id="preview-ambulance" transform="translate(60,210)">
+            <text class="preview-ambulance-icon" x="0" y="7">🚑</text>
+          </g>
+        </svg>
+
+        <div class="dispatch-stepper" id="dispatch-stepper">
+          <div class="stepper-items">
+            <div class="stepper-item" data-step="1">
+              <span class="stepper-index">1</span>
+              <span class="stepper-label">SOS Raised</span>
+            </div>
+            <div class="stepper-item" data-step="2">
+              <span class="stepper-index">2</span>
+              <span class="stepper-label">Smart Match &amp; Route</span>
+            </div>
+            <div class="stepper-item" data-step="3">
+              <span class="stepper-index">3</span>
+              <span class="stepper-label">Hospital Pre-Alert</span>
+            </div>
+          </div>
+          <div class="stepper-track">
+            <div class="stepper-track-fill" id="stepper-track-fill"></div>
+          </div>
+        </div>
+
+        <p class="dispatch-caption" id="dispatch-caption">A bystander raises an SOS with live GPS location, logged instantly to the dispatch grid.</p>
+
+        <div class="dispatch-readout" role="group" aria-label="Live dispatch readout">
+
+          <div class="readout-card" data-tone="red">
+            <div class="readout-head">
+              <span class="readout-swatch"></span>
+              <span class="readout-label">SOS</span>
+              <span class="readout-tag">GPS</span>
+            </div>
+            <div class="readout-value" id="readout-sos">STANDBY</div>
+          </div>
+
+          <div class="readout-card" data-tone="amber">
+            <div class="readout-head">
+              <span class="readout-swatch"></span>
+              <span class="readout-label">Ambulance</span>
+              <span class="readout-tag">UNIT</span>
+            </div>
+            <div class="readout-value" id="readout-ambulance">BASE</div>
+          </div>
+
+          <div class="readout-card" data-tone="teal">
+            <div class="readout-head">
+              <span class="readout-swatch"></span>
+              <span class="readout-label">ETA</span>
+              <span class="readout-tag">MIN</span>
+            </div>
+            <div class="readout-value" id="readout-eta">—</div>
+          </div>
+
+          <div class="readout-card" data-tone="grey">
+            <div class="readout-head">
+              <span class="readout-swatch"></span>
+              <span class="readout-label">Patient Zone</span>
+              <span class="readout-tag">X/Y</span>
+            </div>
+            <div class="readout-value" id="readout-zone">X:0 Y:0</div>
+          </div>
+
+          <div class="readout-card" data-tone="amber">
+            <div class="readout-head">
+              <span class="readout-swatch"></span>
+              <span class="readout-label">Hospital</span>
+              <span class="readout-tag">ALERT</span>
+            </div>
+            <div class="readout-value" id="readout-hospital">STANDBY</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
     <section class="golden-hour" aria-labelledby="golden-hour-title">
       <div class="section-head">
         <span class="panel-eyebrow">THE PROBLEM</span>
@@ -75,84 +196,6 @@
       </div>
 
       <p class="stat-panel-note">These fields are editable — fill them in from your own research notes and cite your sources in your write-up. The values shown are placeholders, not verified claims.</p>
-    </section>
-
-    <section class="how-it-works" aria-labelledby="how-it-works-title">
-      <div class="section-head">
-        <span class="panel-eyebrow">THE SOLUTION</span>
-        <h2 class="section-title" id="how-it-works-title">How Sanjeevani Works</h2>
-        <p class="section-lede">Three steps, from the moment of the incident to the moment the hospital is ready.</p>
-      </div>
-
-      <div class="step-flow">
-
-        <article class="step-card" data-step="1">
-          <span class="step-index">STEP 01</span>
-          <span class="step-icon" aria-hidden="true">🆘</span>
-          <h3 class="step-title">SOS Raised</h3>
-          <p class="step-desc">A bystander, victim, or connected sensor raises an SOS with live GPS location, instantly logged to the dispatch grid.</p>
-        </article>
-
-        <span class="step-connector" aria-hidden="true">→</span>
-
-        <article class="step-card" data-step="2">
-          <span class="step-index">STEP 02</span>
-          <span class="step-icon" aria-hidden="true">🧭</span>
-          <h3 class="step-title">Smart Match & Route</h3>
-          <p class="step-desc">The nearest available ambulance is matched by real-time distance and traffic, then routed to the patient along the fastest live path.</p>
-        </article>
-
-        <span class="step-connector" aria-hidden="true">→</span>
-
-        <article class="step-card" data-step="3">
-          <span class="step-index">STEP 03</span>
-          <span class="step-icon" aria-hidden="true">🏥</span>
-          <h3 class="step-title">Hospital Pre-Alert</h3>
-          <p class="step-desc">The nearest suitable hospital is notified in advance with patient status and ETA, so care teams are ready the moment the ambulance arrives.</p>
-        </article>
-
-      </div>
-    </section>
-
-    <section class="dispatch-preview" aria-labelledby="live-demo-heading">
-      <div class="section-head">
-        <span class="panel-eyebrow">SEE IT WORK</span>
-        <h2 class="section-title" id="live-demo-heading">One dispatch, start to finish</h2>
-        <p class="section-lede">A looping preview of the same three steps above — SOS, smart match &amp; route, and hospital pre-alert. The patient location shifts slightly on every pass.</p>
-      </div>
-      <div class="dispatch-preview-panel">
-        <svg class="dispatch-preview-svg" viewBox="0 0 640 260" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Animated diagram of an ambulance driving from base to a patient, then on to a hospital">
-          <!-- Leg 1: ambulance base -> patient -->
-          <path class="preview-route-path" id="preview-route-1"></path>
-          <path class="preview-progress-path" id="preview-progress-1"></path>
-          <!-- Leg 2: patient -> hospital -->
-          <path class="preview-route-path" id="preview-route-2"></path>
-          <path class="preview-progress-path" id="preview-progress-2"></path>
-          <!-- hospital, fixed position -->
-          <g class="preview-hospital" id="preview-hospital" transform="translate(565,55)">
-            <text class="preview-hospital-icon" x="0" y="8">🏥</text>
-            <g class="preview-eta-badge" id="preview-eta-badge" transform="translate(0,-30)">
-              <rect class="preview-eta-badge-bg" x="-22" y="-11" width="44" height="20" rx="10"></rect>
-              <text class="preview-eta-badge-text" id="preview-eta-badge-text" x="0" y="3">ETA 7m</text>
-            </g>
-            <text class="preview-notify-icon" x="24" y="-14">🔔</text>
-          </g>
-          <!-- patient pin, repositioned each loop by dispatch-preview.js -->
-          <g class="preview-patient-pin" id="preview-patient-pin">
-            <circle class="preview-pin-pulse-ring" r="4"></circle>
-            <text class="preview-pin-icon" x="0" y="7">📍</text>
-          </g>
-          <!-- ambulance, fixed base position, moved along the legs by JS -->
-          <g class="preview-ambulance" id="preview-ambulance" transform="translate(60,210)">
-            <text class="preview-ambulance-icon" x="0" y="7">🚑</text>
-          </g>
-        </svg>
-        <div class="dispatch-preview-steps" id="dispatch-preview-steps">
-          <span class="preview-step" data-step="1"><span class="preview-step-dot"></span>SOS Raised</span>
-          <span class="preview-step" data-step="2"><span class="preview-step-dot"></span>Smart Match &amp; Route</span>
-          <span class="preview-step" data-step="3"><span class="preview-step-dot"></span>Hospital Pre-Alert</span>
-        </div>
-      </div>
     </section>
 
   </main>
