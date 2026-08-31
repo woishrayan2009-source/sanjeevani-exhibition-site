@@ -1218,3 +1218,178 @@ button:focus-visible {
 @media (prefers-reduced-motion: reduce) {
   .marker-icon-ambulance.is-dispatched { animation: none; }
 }
+
+/* ==========================================================================
+   Dispatch Preview — looping schematic of SOS -> Smart Match & Route ->
+   Hospital Pre-Alert for the homepage. The real map lives on the dispatch
+   demo page; this is a lightweight SVG teaser, driven by js/dispatch-preview.js.
+   Append to css/style.css.
+   ========================================================================== */
+
+.dispatch-preview-panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-panel);
+  padding: 22px 20px 18px;
+}
+
+.dispatch-preview-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* faint, always-fully-visible dashed route once a leg is chosen */
+.preview-route-path {
+  fill: none;
+  stroke: var(--border);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-dasharray: 5 7;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.preview-route-path.is-visible { opacity: 1; }
+
+/* solid teal line that grows in as the ambulance actually travels */
+.preview-progress-path {
+  fill: none;
+  stroke: var(--teal);
+  stroke-width: 2.5;
+  stroke-linecap: round;
+  filter: drop-shadow(0 0 4px rgba(53, 224, 196, 0.5));
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.preview-progress-path.is-visible { opacity: 1; }
+
+/* patient pin */
+.preview-patient-pin {
+  opacity: 0;
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.preview-patient-pin.is-visible { opacity: 1; }
+
+.preview-pin-icon { font-size: 20px; text-anchor: middle; }
+
+.preview-pin-pulse-ring {
+  fill: none;
+  stroke: var(--red);
+  stroke-width: 2;
+  opacity: 0;
+}
+.preview-patient-pin.is-pulsing .preview-pin-pulse-ring {
+  animation: preview-pin-pulse 0.7s ease-out 2;
+}
+@keyframes preview-pin-pulse {
+  0%   { opacity: 0.8; r: 4; }
+  100% { opacity: 0; r: 20; }
+}
+
+/* ambulance */
+.preview-ambulance {
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+.preview-ambulance.is-visible { opacity: 1; }
+.preview-ambulance-icon { font-size: 20px; text-anchor: middle; }
+
+/* hospital */
+.preview-hospital-icon {
+  font-size: 24px;
+  text-anchor: middle;
+  filter: none;
+  transition: filter 0.4s ease;
+}
+.preview-hospital.is-nearing .preview-hospital-icon {
+  filter: drop-shadow(0 0 6px rgba(255, 157, 46, 0.55));
+}
+.preview-hospital.is-alert .preview-hospital-icon {
+  filter: drop-shadow(0 0 12px rgba(255, 157, 46, 0.9));
+}
+
+.preview-eta-badge {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.preview-hospital.is-alert .preview-eta-badge {
+  opacity: 1;
+  transform: translateY(0);
+}
+.preview-eta-badge-bg {
+  fill: var(--surface-2);
+  stroke: var(--amber);
+  stroke-width: 1;
+}
+.preview-eta-badge-text {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  fill: var(--amber);
+  text-anchor: middle;
+}
+
+.preview-notify-icon {
+  font-size: 16px;
+  text-anchor: middle;
+  opacity: 0;
+}
+.preview-hospital.is-alert .preview-notify-icon {
+  animation: preview-notify-pulse 0.9s ease-in-out 3;
+}
+@keyframes preview-notify-pulse {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50%      { opacity: 1; transform: scale(1.25); }
+}
+
+/* step indicator row */
+.dispatch-preview-steps {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 20px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+  padding-top: 14px;
+  border-top: 1px solid var(--border-soft);
+}
+
+.preview-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: var(--text-faint);
+  transition: color 0.3s ease;
+}
+.preview-step.is-active { color: var(--text); }
+
+.preview-step-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--border);
+  transition: background 0.3s ease, box-shadow 0.3s ease;
+  flex-shrink: 0;
+}
+.preview-step.is-active .preview-step-dot {
+  background: var(--teal);
+  box-shadow: 0 0 6px var(--teal);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .preview-patient-pin.is-pulsing .preview-pin-pulse-ring,
+  .preview-hospital.is-alert .preview-notify-icon {
+    animation: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .dispatch-preview-steps { gap: 12px; font-size: 10px; }
+}
