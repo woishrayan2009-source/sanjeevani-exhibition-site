@@ -3,10 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Sanjeevani — Documents</title>
-<meta name="description" content="Sanjeevani documentation — write-up, synopsis, system documentation, logbook, presentation, and demo video.">
-<link rel="stylesheet" href="assets/fonts/fonts.css">
+<title>Sanjeevani — Live Dispatch Demo</title>
+<meta name="description" content="Sanjeevani live dispatch demo — smart ambulance matching, real-route dispatch, and hospital pre-alert, simulated with live OSRM routing.">
+<link rel="stylesheet" href="assets/docs/fonts/fonts.css">
 <link rel="stylesheet" href="css/style.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
 </head>
 <body>
 
@@ -15,166 +16,217 @@
       <span class="brand-mark" aria-hidden="true"></span>
       <div class="brand-text">
         <span class="brand-name">SANJEEVANI</span>
-        <span class="brand-sub">Documents</span>
+        <span class="brand-sub">Live Dispatch Demo</span>
       </div>
     </div>
     <nav class="site-nav" aria-label="Primary">
       <a class="site-nav-link" href="index.html">Home</a>
-      <a class="site-nav-link" href="dispatch-demo.html">Live Dispatch</a>
-      <a class="site-nav-link is-active" href="documents.html">Documents</a>
+      <a class="site-nav-link is-active" href="dispatch-demo.html">Live Dispatch</a>
+      <a class="site-nav-link" href="documents.html">Documents</a>
     </nav>
+    <div class="header-meta">
+      <div class="meta-item">
+        <span class="meta-label">Console ID</span>
+        <span class="meta-value">SJ-DC-01 · DEMO</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">Local Time</span>
+        <span class="meta-value" id="clock">--:--:--</span>
+      </div>
+    </div>
   </header>
 
   <div class="hazard-rule" role="presentation"></div>
 
   <main class="dashboard">
 
-    <div class="page-intro">
-      <span class="panel-eyebrow">DOCUMENTATION</span>
-      <h1 class="panel-title">Sanjeevani Documents</h1>
-      <span class="page-intro-note">Write-up, synopsis, system documentation, logbook, presentation, and demo video — all in one place for judges and reviewers.</span>
+    <div class="badge-row">
+      <div class="demo-mode-badge" role="note">
+        <span class="demo-mode-dot" aria-hidden="true"></span>
+        Demo Mode — Simulated Ambulances & Hospitals
+      </div>
+      <div class="demo-mode-badge demo-mode-badge--critical" role="note">
+        <span class="demo-mode-dot" aria-hidden="true"></span>
+        Concept Demonstration — Simulated Data, Not Connected to Real 108/112 Dispatch
+      </div>
     </div>
 
-    <section class="doc-grid" aria-label="Project documents">
+    <section id="status-banner" class="status-banner status-normal" aria-live="polite">
+      <span class="status-led" aria-hidden="true"></span>
+      <div class="status-copy">
+        <span class="status-label">Dispatch Status</span>
+        <span class="status-value" id="status-text">STANDBY</span>
+      </div>
+      <span class="status-detail" id="status-detail">No active call</span>
+    </section>
 
-      <article class="doc-card">
-        <div class="doc-card-head">
-          <span class="doc-card-eyebrow">WRITE-UP</span>
-          <h3 class="doc-card-title">Project Write-Up</h3>
-          <p class="doc-card-desc">The full problem-to-solution narrative for Sanjeevani, including the golden hour research and system design.</p>
-        </div>
-        <div class="doc-preview-wrap">
-          <iframe src="assets/docs/Sanjeevani_Writeup_national_2026.pdf" title="Sanjeevani Project Write-Up preview" loading="lazy"></iframe>
-          <div class="doc-preview-fallback" aria-hidden="true">
-            <span>📄</span>
-            <span>Preview unavailable until Sanjeevani_Writeup_national_2026.pdf is added to assets/docs/</span>
+    <section class="dispatch-layout" aria-label="Dispatch map and routing">
+
+      <div class="map-panel">
+        <header class="panel-head">
+          <span class="panel-eyebrow">MAP</span>
+          <h3 class="panel-title">Dispatch Map</h3>
+          <span class="panel-note">Leaflet · OpenStreetMap</span>
+        </header>
+        <div class="map-canvas-wrap">
+          <div id="map"></div>
+          <div id="map-fallback" class="map-fallback">
+            <div class="map-fallback-label" id="fallback-label">Map tiles unavailable — showing coordinates only</div>
+            <ul class="map-fallback-list" id="fallback-list">
+              <li class="map-fallback-empty">Awaiting reported emergency…</li>
+            </ul>
           </div>
         </div>
-        <div class="doc-card-foot">
-          <span class="doc-tag">PDF</span>
-          <a class="doc-download" href="assets/docs/Sanjeevani_Writeup_national_2026.pdf" download>
-            <span class="doc-download-icon" aria-hidden="true">↓</span>
-            Download
-          </a>
-        </div>
-      </article>
+      </div>
 
-      <article class="doc-card">
-        <div class="doc-card-head">
-          <span class="doc-card-eyebrow">SYNOPSIS</span>
-          <h3 class="doc-card-title">Synopsis</h3>
-          <p class="doc-card-desc">A condensed one-page summary of the problem, the solution, and the impact for quick review.</p>
-        </div>
-        <div class="doc-preview-wrap">
-          <iframe src="assets/docs/Sanjeevani_Synopsis_2026.pdf" title="Sanjeevani Synopsis preview" loading="lazy"></iframe>
-          <div class="doc-preview-fallback" aria-hidden="true">
-            <span>📄</span>
-            <span>Preview unavailable until Sanjeevani_Synopsis_2026.pdf is added to assets/docs/</span>
+      <div class="route-panel">
+        <header class="panel-head">
+          <span class="panel-eyebrow">ROUTE</span>
+          <h3 class="panel-title">Two-Leg Routing</h3>
+          <span class="panel-note">OSRM · driving time</span>
+        </header>
+
+        <div class="route-leg">
+          <div class="route-leg-head">
+            <span class="route-leg-index">LEG 1</span>
+            <span class="route-leg-title">Ambulance → Patient</span>
           </div>
-        </div>
-        <div class="doc-card-foot">
-          <span class="doc-tag">PDF</span>
-          <a class="doc-download" href="assets/docs/Sanjeevani_Synopsis_2026.pdf" download>
-            <span class="doc-download-icon" aria-hidden="true">↓</span>
-            Download
-          </a>
-        </div>
-      </article>
-
-      <article class="doc-card">
-        <div class="doc-card-head">
-          <span class="doc-card-eyebrow">DOCUMENTATION</span>
-          <h3 class="doc-card-title">System Documentation</h3>
-          <p class="doc-card-desc">Architecture, matching logic, and routing details behind the dispatch and hospital pre-alert flow.</p>
-        </div>
-        <div class="doc-preview-wrap">
-          <iframe src="assets/docs/Sanjeevani_System_Documentation.pdf" title="Sanjeevani System Documentation preview" loading="lazy"></iframe>
-          <div class="doc-preview-fallback" aria-hidden="true">
-            <span>📄</span>
-            <span>Preview unavailable until Sanjeevani_System_Documentation.pdf is added to assets/docs/</span>
+          <div class="route-leg-tiles">
+            <article class="sensor-tile" data-sensor="amb-distance">
+              <header class="tile-head">
+                <span class="tile-icon tile-icon-ambulance" aria-hidden="true"></span>
+                <h3 class="tile-title">Distance</h3>
+                <span class="tile-tag">OSRM</span>
+              </header>
+              <div class="tile-body">
+                <span class="tile-value" id="leg1-distance">—</span>
+                <span class="tile-unit">km</span>
+                <span class="tile-trend" id="leg1-distance-trend">▬</span>
+              </div>
+              <footer class="tile-foot">
+                <span class="tile-state" id="leg1-ambulance-id">No ambulance selected</span>
+              </footer>
+            </article>
+            <article class="sensor-tile" data-sensor="amb-eta">
+              <header class="tile-head">
+                <span class="tile-icon tile-icon-ambulance" aria-hidden="true"></span>
+                <h3 class="tile-title">ETA</h3>
+                <span class="tile-tag">DRIVE</span>
+              </header>
+              <div class="tile-body">
+                <span class="tile-value" id="leg1-eta">—</span>
+                <span class="tile-unit">min</span>
+                <span class="tile-trend" id="leg1-eta-trend">▬</span>
+              </div>
+              <footer class="tile-foot">
+                <span class="tile-state" id="leg1-state">Awaiting report</span>
+              </footer>
+            </article>
           </div>
+          <p class="route-leg-note" id="leg1-note">All available ambulances are compared by live driving time to the patient — not straight-line distance — and the fastest is dispatched.</p>
         </div>
-        <div class="doc-card-foot">
-          <span class="doc-tag">PDF</span>
-          <a class="doc-download" href="assets/docs/Sanjeevani_System_Documentation.pdf" download>
-            <span class="doc-download-icon" aria-hidden="true">↓</span>
-            Download
-          </a>
-        </div>
-      </article>
 
-      <article class="doc-card">
-        <div class="doc-card-head">
-          <span class="doc-card-eyebrow">LOGBOOK</span>
-          <h3 class="doc-card-title">Logbook</h3>
-          <p class="doc-card-desc">Dated build log tracking design decisions, iterations, and testing notes throughout development.</p>
-        </div>
-        <div class="doc-preview-wrap">
-          <iframe src="assets/docs/Sanjeevani_Logbook_2026.pdf" title="Sanjeevani Logbook preview" loading="lazy"></iframe>
-          <div class="doc-preview-fallback" aria-hidden="true">
-            <span>📄</span>
-            <span>Preview unavailable until Sanjeevani_Logbook_2026.pdf is added to assets/docs/</span>
+        <div class="route-leg">
+          <div class="route-leg-head">
+            <span class="route-leg-index">LEG 2</span>
+            <span class="route-leg-title">Patient → Hospital</span>
           </div>
-        </div>
-        <div class="doc-card-foot">
-          <span class="doc-tag">PDF</span>
-          <a class="doc-download" href="assets/docs/Sanjeevani_Logbook_2026.pdf" download>
-            <span class="doc-download-icon" aria-hidden="true">↓</span>
-            Download
-          </a>
-        </div>
-      </article>
-
-      <article class="doc-card">
-        <div class="doc-card-head">
-          <span class="doc-card-eyebrow">PRESENTATION</span>
-          <h3 class="doc-card-title">Presentation</h3>
-          <p class="doc-card-desc">Slide deck used for the judging presentation, covering problem, solution, and demo walkthrough.</p>
-        </div>
-        <div class="doc-preview-wrap">
-          <iframe src="assets/docs/Sanjeevani_Presentation_2026.pdf" title="Sanjeevani Presentation preview" loading="lazy"></iframe>
-          <div class="doc-preview-fallback" aria-hidden="true">
-            <span>📄</span>
-            <span>Preview unavailable until Sanjeevani_Presentation_2026.pdf is added to assets/docs/</span>
+          <div class="route-leg-tiles">
+            <article class="sensor-tile" data-sensor="hosp-distance">
+              <header class="tile-head">
+                <span class="tile-icon tile-icon-hospital" aria-hidden="true"></span>
+                <h3 class="tile-title">Distance</h3>
+                <span class="tile-tag">OSRM</span>
+              </header>
+              <div class="tile-body">
+                <span class="tile-value" id="leg2-distance">—</span>
+                <span class="tile-unit">km</span>
+                <span class="tile-trend" id="leg2-distance-trend">▬</span>
+              </div>
+              <footer class="tile-foot">
+                <span class="tile-state" id="leg2-hospital-id">No hospital selected</span>
+              </footer>
+            </article>
+            <article class="sensor-tile" data-sensor="hosp-eta">
+              <header class="tile-head">
+                <span class="tile-icon tile-icon-hospital" aria-hidden="true"></span>
+                <h3 class="tile-title">ETA</h3>
+                <span class="tile-tag">DRIVE</span>
+              </header>
+              <div class="tile-body">
+                <span class="tile-value" id="leg2-eta">—</span>
+                <span class="tile-unit">min</span>
+                <span class="tile-trend" id="leg2-eta-trend">▬</span>
+              </div>
+              <footer class="tile-foot">
+                <span class="tile-state" id="leg2-state">Awaiting Leg 1</span>
+              </footer>
+            </article>
           </div>
+          <p class="route-leg-note" id="leg2-note">Routed to the nearest hospital equipped for the reported emergency type.</p>
         </div>
-        <div class="doc-card-foot">
-          <span class="doc-tag">PDF</span>
-          <a class="doc-download" href="assets/docs/Sanjeevani_Presentation_2026.pdf" download>
-            <span class="doc-download-icon" aria-hidden="true">↓</span>
-            Download
-          </a>
-        </div>
-      </article>
+      </div>
 
-      <article class="doc-card">
-        <div class="doc-card-head">
-          <span class="doc-card-eyebrow">VIDEO</span>
-          <h3 class="doc-card-title">Demo Video</h3>
-          <p class="doc-card-desc">A short walkthrough of the live dispatch demo in action, from SOS to hospital pre-alert.</p>
-        </div>
-        <div class="doc-preview-wrap">
-          <video controls preload="metadata" poster="assets/docs/Sanjeevani_Demo_Video_2026_poster.jpg">
-            <source src="assets/docs/Sanjeevani_Demo_Video_2026.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
-        </div>
-        <div class="doc-card-foot">
-          <span class="doc-tag">MP4</span>
-          <a class="doc-download" href="assets/docs/Sanjeevani_Demo_Video_2026.mp4" download>
-            <span class="doc-download-icon" aria-hidden="true">↓</span>
-            Download
-          </a>
-        </div>
-      </article>
+    </section>
 
+    <section class="prealert-panel" id="prealert-panel" aria-live="polite">
+      <div class="prealert-head">
+        <span class="prealert-icon" aria-hidden="true">🏥</span>
+        <div class="prealert-title-wrap">
+          <span class="prealert-title">Hospital Pre-Alert Sent</span>
+          <span class="prealert-meta" id="prealert-meta">—</span>
+        </div>
+      </div>
+      <p class="prealert-message" id="prealert-message"></p>
+    </section>
+
+    <section class="log-panel">
+      <button type="button" class="log-toggle" id="log-toggle" aria-expanded="true" aria-controls="log-list">
+        <span class="panel-eyebrow">LOG</span>
+        <h3 class="panel-title">Dispatch Log</h3>
+        <span class="log-toggle-icon" aria-hidden="true">▾</span>
+      </button>
+      <ul class="log-list" id="log-list"></ul>
+    </section>
+
+    <section class="input-panel" aria-label="Report emergency controls">
+      <header class="panel-head">
+        <span class="panel-eyebrow">CONTROL</span>
+        <h3 class="panel-title">Report Emergency</h3>
+        <span class="panel-note">Judge demo mode — simulated call</span>
+      </header>
+      <p class="report-form-note">
+        Simulates a call reporting a medical emergency. In the live system this is triggered automatically by an SOS signal; here, set the type and location, then submit.
+      </p>
+
+      <div class="input-grid">
+        <div class="input-field">
+          <label for="input-emergency-type">Emergency Type</label>
+          <select id="input-emergency-type">
+            <option value="Trauma">Trauma</option>
+            <option value="Cardiac">Cardiac</option>
+            <option value="General">General</option>
+          </select>
+        </div>
+        <div class="input-field">
+          <label for="input-location">Patient Location (lat, lng)</label>
+          <input type="text" id="input-location" value="23.0225, 72.5714">
+        </div>
+      </div>
+
+      <div class="input-actions">
+        <button type="button" class="submit-btn" id="report-emergency">Report Emergency</button>
+        <button type="button" class="reset-btn" id="reset-dispatch">Reset</button>
+      </div>
     </section>
 
   </main>
 
   <footer class="site-footer">
-    <span>Sanjeevani Documents — write-up, synopsis, documentation, logbook, presentation &amp; demo video</span>
+    <span>Sanjeevani Live Dispatch Demo — simulated ambulances &amp; hospitals, live OSRM routing</span>
   </footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+  <script src="js/dispatch-demo.js"></script>
 </body>
 </html>
